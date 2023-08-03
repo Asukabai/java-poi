@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<!-- 网页使用的语言 -->
+<html lang="zh-CN">
+<head>
+    <!-- 指定字符集 -->
+    <meta charset="utf-8">
+    <!-- 使用Edge最新的浏览器的渲染方式 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- viewport视口：网页可以根据设置的宽度自动进行适配，在浏览器的内部虚拟一个容器，容器的宽度与设备的宽度相同。
+    width: 默认宽度与设备的宽度相同
+    initial-scale: 初始的缩放比，为1:1 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>用户信息管理系统</title>
+
+    <!-- 1. 导入CSS的全局样式 -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- 2. jQuery导入，建议使用1.9以上的版本 -->
+    <script src="/js/jquery-2.1.0.min.js"></script>
+    <!-- 3. 导入bootstrap的js文件 -->
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="js/vuejs-2.5.16.js"></script>
+    <script src="js/axios-0.18.0.js"></script>
+
+    <style type="text/css">
+        td, th {
+            text-align: center;
+        }
+    </style>
+
+</head>
+<body>
+<div id="app" class="container">
+    <h3 style="text-align: center">员工信息列表</h3>
+    <h5 style="text-align: right">
+        <a href="echarts_index.html" target="_blank">echarts图表报表</a>
+        <a href="highcharts_index.html" target="_blank">highcharts图表报表</a>
+        <button @click="downLoadPDF">导出PDF列表</button>
+        <button @click="downLoadWithEasyPOI">EasyPOI方式导出</button>
+        <button @click="downLoadCSV">导出CSV文件</button>
+        <button @click="downLoadMillion">百万数据导出</button>
+        <button @click="downLoadXlsxByPoi">使用POI导出Excel</button>
+    </h5>
+
+    <table border="1" class="table table-bordered table-hover">
+        <tr class="success">
+            <th>编号</th>
+            <th>姓名</th>
+            <th>手机号</th>
+            <th>入职日期</th>
+            <th>现住址</th>
+            <th>操作</th>
+        </tr>
+        <tr v-for="user in userList">
+            <td>{{user.id}}</td>
+            <td>{{user.userName}}</td>
+            <td>{{user.phone}}</td>
+            <td>{{user.hireDate}}</td>
+            <td>{{user.address}}</td>
+            <td>
+                <a class="btn btn-default btn-sm" :href="'/user/download?id='+user.id" target="_blank">下载</a>
+                <a class="btn btn-default btn-sm" :href="'./contract.html?id='+user.id" target="_blank">合同</a>
+            </td>
+        </tr>
+    </table>
+    <input  name="file" type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" @change="uploadExcel"/>
+  </div>
+</body>
+</html>
+<script>
+    new Vue({
+        el:"#app",
+        data:{
+            userList:[],
+        },
+        methods:{
+            findPage(){
+                // 就是从后台获取所有用户的数据  ，后台的方法就是：http://localhost/user/findPage
+                // 向后台发送请求时我们需要借助 axios的工具
+                _this = this;
+                axios.get("/user/findPage").then(function(res){
+                    _this.userList  = res.data; //如果 出现在回调函数中的this关键字指的是window对象而不是Vue对象
+                })
+            },
+
+            downLoadPDF(){
+                window.open("/user/downLoadPDF");
+            },
+            downLoadXlsxByPoi(){
+                window.open("/user/downLoadXlsxByPoi");
+            },
+            downLoadMillion(){
+                window.open("/user/downLoadMillion");
+            },
+            downLoadCSV(){
+                window.open("/user/downLoadCSV");
+            },
+            downLoadWithEasyPOI(){
+                window.open("/user/downLoadWithEasyPOI");
+            },
+            uploadExcel (e) {   // 上传excel
+                var self = this;
+                let file = e.target.files[0]
+                let param = new FormData()  // 创建form对象
+                param.append('file', file)  // 通过append向form对象添加数据
+                param.append('chunk', '0') // 添加form表单中其他数据
+                let config = {
+                    headers: {'Content-Type': 'multipart/form-data'}
+                }
+                // 添加请求头
+                axios.post('/user/uploadExcel', param, config)
+                    .then(response => {
+                        self.findPage();
+                    })
+            }
+        },
+        created(){   //钩子函数 起到的作用就是页面加载函数
+            this.findPage();
+        }
+    })
+</script>

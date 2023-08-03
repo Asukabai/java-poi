@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no,minimal-ui" />
+    <title>页面左右结构（其中一端自适应）</title>
+    <style type="text/css">
+        /*右边*/
+        .my-box{
+            width: 100%;
+            height: 600px;
+        }
+        /*左边*/
+        .my-box-left{
+            width: 200px;
+            height: 100%;
+            float: left;
+            background-color: red;
+        }
+        .my-box-right{
+            overflow: hidden;
+            background-color: yellowgreen;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+<div class="my-box">
+    <div class="my-box-left">
+        <button>饼状图</button>
+        <button>柱状图</button>
+        <button>折线图</button>
+        <button>地图</button>
+    </div>
+    <div class="my-box-right">
+        <div id="container" style="height:450px;"></div>
+    </div>
+</div>
+</body>
+</html>

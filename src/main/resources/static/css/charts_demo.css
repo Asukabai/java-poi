@@ -1,0 +1,17 @@
+/*右边*/
+.my-box{
+    width: 100%;
+    height: 600px;
+}
+/*左边*/
+.my-box-left{
+    width: 200px;
+    height: 100%;
+    float: left;
+    /*background-color: red;*/
+}
+.my-box-right{
+    overflow: hidden;
+    /*background-color: yellowgreen;*/
+    height: 100%;
+}
