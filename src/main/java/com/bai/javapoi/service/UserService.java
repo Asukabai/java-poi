@@ -20,4 +20,6 @@ public interface UserService {
 
     void downLoadUserInfoWithTempalte2(Long id, HttpServletRequest request, HttpServletResponse response) throws Exception;
 
+    void downLoadMillion(HttpServletRequest request, HttpServletResponse response) throws IOException;
+
 }

@@ -55,4 +55,17 @@ public class UserController {
         userService.downLoadUserInfoWithTempalte(id,request,response);
     }
 
+    /**
+     * 百万数据的导出 1、使用高版本的Excel ；2、使用sax 方式解析Excel（XML）
+     * 限制 : 不能使用模板；不能使用太多的样式
+     * @param id
+     * @param request
+     * @param response
+     * @throws Exception
+     */
+    @GetMapping(value = "/downLoadMillion",name = "导出用户百万数据的导出")
+    public void downLoadMillion(Long id,HttpServletRequest request,HttpServletResponse response) throws Exception{
+        userService.downLoadMillion(request,response);
+    }
+
 }

@@ -8,10 +8,12 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ResourceUtils;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
@@ -190,4 +192,77 @@ public class UserServiceImpl  implements UserService {
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         workbook.write(outputStream);
     }
+
+    public void downLoadMillion(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // 创建一个空的工作薄
+        Workbook workbook = new SXSSFWorkbook();
+        int page = 1;
+        int pageSize=200000;
+        int rowIndex = 1; //每一个工作页的行数
+        int num = 0; //总数据量
+        Row row = null;
+        Cell cell = null;
+        Sheet sheet = null;
+        while (true){  //不停地查询
+
+             // 利用分页查询，不能直接一下子全部查询出来
+            List<User> userList = this.findPage(page,pageSize);
+
+            if(CollectionUtils.isEmpty(userList)){  //如果查询不到就不再查询了
+                break;
+            }
+            // 取模
+            if(num%1000000==0){  //每100W个就重新创建新的sheet和标题
+                rowIndex = 1;
+                // 在工作薄中创建一个工作表
+                sheet = workbook.createSheet("第"+((num/1000000)+1)+"个工作表");
+                // 设置列宽
+                sheet.setColumnWidth(0,8*256);
+                sheet.setColumnWidth(1,12*256);
+                sheet.setColumnWidth(2,15*256);
+                sheet.setColumnWidth(3,15*256);
+                sheet.setColumnWidth(4,30*256);
+                // 处理标题
+                String[] titles = new String[]{"编号","姓名","手机号","入职日期","现住址"};
+                //        创建标题行
+                Row titleRow = sheet.createRow(0);
+
+                for (int i = 0; i < titles.length; i++) {
+                    cell = titleRow.createCell(i);
+                    cell.setCellValue(titles[i]);
+                }
+            }
+
+            // 处理内容
+
+            for (User user : userList) {
+                row = sheet.createRow(rowIndex);
+                cell = row.createCell(0);
+                cell.setCellValue(user.getId());
+
+                cell = row.createCell(1);
+                cell.setCellValue(user.getUserName());
+
+                cell = row.createCell(2);
+                cell.setCellValue(user.getPhone());
+
+                cell = row.createCell(3);
+                cell.setCellValue(simpleDateFormat.format(user.getHireDate()));
+
+                cell = row.createCell(4);
+                cell.setCellValue(user.getAddress());
+                rowIndex++;
+                num++;
+            }
+            page++;// 继续查询下一页
+        }
+        // 导出的文件名称
+        String filename="百万数据.xlsx";
+        // 设置文件的打开方式和mime类型
+        ServletOutputStream outputStream = response.getOutputStream();
+        response.setHeader( "Content-Disposition", "attachment;filename="  + new String(filename.getBytes(),"ISO8859-1"));
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        workbook.write(outputStream);
+    }
+
 }
