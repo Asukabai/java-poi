@@ -6,7 +6,6 @@ import com.bai.javapoi.service.UserService;
 import com.bai.javapoi.utils.ExcelExportEngine;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
@@ -14,7 +13,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
-
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -136,17 +134,34 @@ public class UserServiceImpl  implements UserService {
 
         // 先创建一个字节输出流
         ByteArrayOutputStream byteArrayOut = new ByteArrayOutputStream();
+
         // BufferedImage是一个带缓冲区图像类,主要作用是将一幅图片加载到内存中
         BufferedImage bufferImg = ImageIO.read(new File(rootPath + user.getPhoto()));
         // 把读取到图像放入到输出流中
-        ImageIO.write(bufferImg, "jpg", byteArrayOut);
+        String extName = user.getPhoto().substring(user.getPhoto().lastIndexOf(".") + 1).toUpperCase();
+
+        ImageIO.write(bufferImg, extName, byteArrayOut);
         // 创建一个绘图控制类，负责画图
         Drawing patriarch = sheet.createDrawingPatriarch();
         // 指定把图片放到哪个位置
         ClientAnchor anchor = new XSSFClientAnchor(3600, 3600, 0, 0, 2, 1, 4, 5);
 
+
+        int  format = 0;
+
+        switch(extName){
+            case"JPG":{
+                format = XSSFWorkbook.PICTURE_TYPE_JPEG;
+            }
+            case"JPEG":{
+                format = XSSFWorkbook.PICTURE_TYPE_JPEG;
+            }
+            case"PNG":{
+                format = XSSFWorkbook.PICTURE_TYPE_PNG;
+            }
+        }
         // 开始把图片写入到sheet指定的位置
-        patriarch.createPicture(anchor, workbook.addPicture(byteArrayOut.toByteArray(), Workbook.PICTURE_TYPE_JPEG));
+        patriarch.createPicture(anchor, workbook.addPicture(byteArrayOut.toByteArray(), format));
 
         // 导出的文件名称
         String filename="员工("+ user.getUserName() +")详细信息数据.xlsx";

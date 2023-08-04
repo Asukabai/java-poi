@@ -52,7 +52,7 @@ public class UserController {
      */
     @GetMapping(value = "/download",name = "导出用户详细信息")
     public void downLoadUserInfoWithTempalte2(Long id,HttpServletRequest request,HttpServletResponse response) throws Exception{
-        userService.downLoadUserInfoWithTempalte2(id,request,response);
+        userService.downLoadUserInfoWithTempalte(id,request,response);
     }
 
 }
