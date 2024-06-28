@@ -1,0 +1,190 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        /*body：将页面的布局方式设置为垂直方向的列布局，使内容在交叉轴上居中对齐，并设置高度为视口高度的80%。 */
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            align-content: center; /*与交叉轴的中点对齐；*/
+            height: 80vh; /* 设置高度占满整个视口 */
+        }
+        /* h1：将标题文本居中对齐 */
+        h1 {
+            text-align: center;
+        }
+        .flex-container {
+            display: flex;
+            align-items: center;
+            gap: -5px; /* 将三者之间的间距设置为5px */
+        }
+        /*form：将表单内部元素在主轴上居中对齐，并添加底部边距为20px*/
+        form {
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        /* label：将标签元素设为内联块元素，设置宽度为250px，并给字体加粗 */
+        label {
+            display: inline-block;
+            width: 270px;
+        }
+        /* input[type="file"]：给文件输入框添加顶部边距为5px，与上方的元素有一定间距 */
+        input[type="file"] {
+            margin-top: 5px;
+        }
+        /* button：设置按钮的内边距为10px的垂直方向和20px的水平方向，背景颜色为#4CAF50（浅绿色），文字颜色为白色，无边框，并将光标设置为手型 */
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        /* button:disabled：定义按钮在禁用状态下的样式，将背景颜色设为#ccc（灰色），并将光标样式设置为禁止 */
+        button:disabled {
+            background-color: #b4aeae;
+            cursor: not-allowed;
+        }
+        button.export-file {
+            /*background-color: #007dff;*/
+            background-color: #ffc800;
+            margin-top: 2px;
+        }
+        .loading {
+            color: blue;
+        }
+        .success {
+            color: green;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<h1 >修改配置文件</h1>
+<br> <!-- 添加一个换行标签 -->
+<form id="uploadForm">
+    <div style="display: flex; justify-content: space-between;">
+        <div style="width: 48%;">
+            <div class="flex-container" >
+                <label for="configOfOriginal" style="font-size: 17px;" >测试报告配置文件：</label>
+                <input type="file" id="configOfOriginal" name="files[]" accept=".properties" style="font-size: 14px; padding: 6px 12px;" >
+            </div>
+            <div class="flex-container" >
+                <label for="configOfCompliance" style="font-size: 17px;" >符合性表配置文件：</label>
+                <input type="file" id="configOfCompliance" name="files[]" accept=".properties" style="font-size: 14px; padding: 6px 12px;" >
+            </div>
+        </div>
+        <div style="width: 48%;">
+            <div class="flex-container" >
+                <label for="template" style="font-size: 17px;" >模版Excel文件：</label>
+                <input type="file" id="template" name="files[]" accept=".xlsx" style="font-size: 14px; padding: 6px 12px;" >
+            </div>
+        </div>
+    </div>
+    <button type="submit">上传</button>
+    <button id="backButton" type="button">退回上一版本</button>
+    <button onclick="location.href='index.html'" type="button">返回</button>
+</form>
+
+<script src="js/jquery.min.js"></script>
+
+<script>
+    let fileNames = [];// 声明一个全局变量，用于存储文件名
+    <!--获取表单元素-->
+    const uploadForm = document.getElementById('uploadForm');
+    // 添加表单提交事件监听器，当表单提交时触发回调函数
+    uploadForm.addEventListener('submit', function (e) {
+        e.preventDefault(); // 阻止表单默认提交行为
+        //创建FormData对象，用于存储要上传的文件数据
+        let formData = new FormData();
+        //获取所有的文件输入框
+        let files = document.querySelectorAll('input[type="file"]');
+        let hasFileSelected = false; // 是否至少选择了一个文件
+        // 遍历文件输入框
+        files.forEach(function (fileInput) {
+            // 获取当前文件输入框选择的文件列表
+            let fileList = fileInput.files;
+            for (let i = 0; i < fileList.length; i++) {
+                // 将文件添加到FormData中
+                formData.append('multipartFiles', fileList[i]);
+                formData.append('types', fileInput.id); // 使用文件输入框的id作为类型
+                // 标记已选择了文件
+                hasFileSelected = true;
+                // 获取文件名并存储到全局变量中
+                let fileName = fileList[i].name;
+                fileNames.push(fileName);
+            }
+        });
+        if (!hasFileSelected) {
+            alert('请至少选择一个文件！');
+            return;
+        }
+        // 显示文件上传中的提示信息
+        showLoadingMessage('文件上传中...');
+        // 使用Fetch API发送POST请求，将FormData对象作为请求体上传文件
+        fetch('/manage/server/fixExcels', {
+            method: 'POST',
+            body: formData
+        })
+            // 处理数据库的响应数据
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                // 将后端返回的数据打印到控制台
+                console.log(data); // 处理后端返回的数据
+                // 判断文件上传是否成功
+                if (data.result === 1 && data.data.length > 0) {
+                    // 显示文件上传完成的提示信息
+                    showMessage('文件上传完成！', 'success');
+                }
+            })
+            // 处理上传失败的错误情况
+            .catch(function (error) {
+                console.error('上传失败:', error);
+                showMessage('文件上传失败，请重试！', 'error');
+            });
+    });
+    function showLoadingMessage(message) {
+        showMessage(message, 'loading');
+    }
+    function showMessage(message, type) {
+        let messageElement = document.createElement('div');
+        messageElement.innerText = message;
+        messageElement.className = type;
+        document.body.appendChild(messageElement);
+    }
+
+
+    // 获取"退回上一版本"按钮元素
+    const backButton = document.getElementById('backButton');
+
+    // 添加按钮点击事件监听器
+    backButton.addEventListener('click', function () {
+        // 发送POST请求到后端接口
+        fetch('/manage/server/backFiles', {
+            method: 'POST'
+        })
+            .then(function (response) {
+                // 处理响应数据
+                if (response.ok) {
+                    // 显示成功消息
+                    showMessage('文件已退回上一版本！', 'success');
+                } else {
+                    // 显示错误消息
+                    showMessage('文件退回失败，请重试！', 'error');
+                }
+            })
+            .catch(function (error) {
+                console.error('请求失败:', error);
+                showMessage('文件退回失败，请重试！', 'error');
+            });
+    });
+</script>
+</body>
+</html>

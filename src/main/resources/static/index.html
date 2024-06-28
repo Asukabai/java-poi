@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+         /*body：将页面的布局方式设置为垂直方向的列布局，使内容在交叉轴上居中对齐，并设置高度为视口高度的80%。 */
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            align-content: center; /*与交叉轴的中点对齐；*/
+            height: 80vh; /* 设置高度占满整个视口 */
+        }
+        /* h1：将标题文本居中对齐 */
+        h1 {
+            text-align: center;
+        }
+        .flex-container {
+            display: flex;
+            align-items: center;
+            gap: -5px; /* 将三者之间的间距设置为5px */
+        }
+         /*form：将表单内部元素在主轴上居中对齐，并添加底部边距为20px*/
+        form {
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        /* label：将标签元素设为内联块元素，设置宽度为250px，并给字体加粗 */
+        label {
+            display: inline-block;
+            width: 270px;
+        }
+
+        /* input[type="file"]：给文件输入框添加顶部边距为5px，与上方的元素有一定间距 */
+        input[type="file"] {
+            margin-top: 5px;
+        }
+
+        /* button：设置按钮的内边距为10px的垂直方向和20px的水平方向，背景颜色为#4CAF50（浅绿色），文字颜色为白色，无边框，并将光标设置为手型 */
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        /* button:disabled：定义按钮在禁用状态下的样式，将背景颜色设为#ccc（灰色），并将光标样式设置为禁止 */
+        button:disabled {
+            background-color: #b4aeae;
+            cursor: not-allowed;
+        }
+
+         button.export-file {
+             /*background-color: #007dff;*/
+             background-color: #ffc800;
+             margin-top: 2px;
+         }
+        .loading {
+            color: blue;
+        }
+        .success {
+            color: green;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<h1 >文件上传和导出(V1.1.4)</h1>
+<br> <!-- 添加一个换行标签 -->
+<form id="uploadForm">
+    <div style="display: flex; justify-content: space-between;">
+        <div style="width: 48%;">
+    <div class="flex-container" >
+        <label for="初测主特性" style="font-size: 17px;">初测主特性：</label>
+<!--        <input type="file" id="初测主特性" name="files[]" accept=".xlsx">-->
+        <input type="file" id="初测主特性" name="files[]" accept=".xlsx" style="font-size: 14px; padding: 6px 8px;">
+        <button class="export-file" >数据库导出</button>
+<!--        <button type="button" class="btn btn-primary btn-sm text-nowrap"  >数据库导出</button>-->
+    </div>
+    <div class="flex-container" >
+        <label for="初测副特性" style="font-size: 17px;" >初测副特性：</label>
+        <input type="file" id="初测副特性" name="files[]" accept=".xlsx" style="font-size: 14px; padding: 6px 12px;" >
+        <button class="export-file" >数据库导出</button>
+    </div>
+    <div class="flex-container" >
+        <label for="力学后" style="font-size: 17px;" >力学后：</label>
+        <input type="file" id="力学后" name="files[]" accept=".xlsx" style="font-size: 14px; padding: 6px 12px;" >
+        <button class="export-file" >数据库导出</button>
+    </div>
+    <div class="flex-container" >
+        <label for="温循高温" style="font-size: 17px;" >热循环高温副特性：</label>
+        <input type="file" id="温循高温" name="files[]" accept=".xlsx" style="font-size: 14px; padding: 6px 12px;" >
+        <button class="export-file" >数据库导出</button>
+    </div>
+    <div class="flex-container" >
+        <label for="温循低温" style="font-size: 17px;" >热循环低温副特性：</label>
+        <input type="file" id="温循低温" name="files[]" accept=".xlsx" style="font-size: 14px; padding: 6px 12px;" >
+        <button class="export-file" >数据库导出</button>
+    </div>
+    <div class="flex-container" >
+        <label for="热真空高温" style="font-size: 17px;" >热真空首循高温副特性：</label>
+        <input type="file" id="热真空高温" name="files[]" accept=".xlsx" style="font-size: 14px; padding: 6px 12px;" >
+        <button class="export-file" >数据库导出</button>
+    </div>
+    <div class="flex-container" >
+        <label for="热真空低温" style="font-size: 17px;" >热真空首循低温副特性：</label>
+        <input type="file" id="热真空低温" name="files[]" accept=".xlsx" style="font-size: 14px; padding: 6px 12px;" >
+        <button class="export-file" >数据库导出</button>
+    </div>
+    <div class="flex-container">
+        <label for="终测主特性" style="font-size: 17px;" >终测主特性：</label>
+        <input type="file" id="终测主特性" name="files[]" accept=".xlsx" style="font-size: 14px; padding: 6px 12px;" >
+        <button class="export-file" >数据库导出</button>
+    </div>
+    <div class="flex-container">
+        <label for="终测副特性" style="font-size: 17px;" >终测副特性：</label>
+        <input type="file" id="终测副特性" name="files[]" accept=".xlsx" style="font-size: 14px; padding: 6px 12px;" >
+        <button class="export-file" >数据库导出</button>
+    </div>
+    <div class="flex-container" >
+        <label for="指标要求" style="font-size: 17px;" >指标要求：</label>
+        <input type="file" id="指标要求" name="files[]" accept=".xlsx" style="font-size: 14px; padding: 6px 12px;" >
+        <button class="export-file" >数据库导出</button>
+    </div>
+
+ </div>
+    <div style="width: 48%;">
+        <div class="flex-container" >
+            <label for="初测符合性" style="font-size: 17px;">初测符合性：</label>
+            <input type="file" id="初测符合性" name="files[]" accept=".xlsx" style="font-size: 14px; padding: 6px 12px;" >
+            <button class="export-file" >数据库导出</button>
+        </div>
+        <div class="flex-container" >
+            <label for="力学后符合性" style="font-size: 17px;" >力学后符合性：</label>
+            <input type="file" id="力学后符合性" name="files[]" accept=".xlsx" style="font-size: 14px; padding: 6px 12px;" >
+            <button class="export-file" >数据库导出</button>
+        </div>
+        <div class="flex-container" >
+            <label for="热循环高温符合性" style="font-size: 17px;" >热循环高温符合性：</label>
+            <input type="file" id="热循环高温符合性" name="files[]" accept=".xlsx" style="font-size: 14px; padding: 6px 12px;" >
+            <button class="export-file" >数据库导出</button>
+        </div>
+        <div class="flex-container" >
+            <label for="热循环低温符合性" style="font-size: 17px;" >热循环低温符合性：</label>
+            <input type="file" id="热循环低温符合性" name="files[]" accept=".xlsx" style="font-size: 14px; padding: 6px 12px;" >
+            <button class="export-file" >数据库导出</button>
+        </div>
+        <div class="flex-container" >
+            <label for="热真空首循高温符合性" style="font-size: 17px;" >热真空首循高温符合性：</label>
+            <input type="file" id="热真空首循高温符合性" name="files[]" accept=".xlsx" style="font-size: 14px; padding: 6px 12px;" >
+            <button class="export-file" >数据库导出</button>
+        </div>
+        <div class="flex-container" >
+            <label for="热真空首循低温符合性" style="font-size: 17px;" >热真空首循低温符合性：</label>
+            <input type="file" id="热真空首循低温符合性" name="files[]" accept=".xlsx" style="font-size: 14px; padding: 6px 12px;" >
+            <button class="export-file" >数据库导出</button>
+        </div>
+        <div class="flex-container" >
+            <label for="终测符合性" style="font-size: 17px;" >终测符合性：</label>
+            <input type="file" id="终测符合性" name="files[]" accept=".xlsx" style="font-size: 14px; padding: 6px 12px;" >
+            <button class="export-file" >数据库导出</button>
+        </div>
+    </div>
+  </div>
+    <button type="submit" >上传</button>
+    <button id="exportButton"  disabled>导出测试报告</button>
+<!--    <button onclick="location.href='fixFile.html'" type="button">设置</button>-->
+    <button onclick="location.href='fixFile.html'" type="button" style="position: absolute; top: 0; right: 0; padding: 4px 8px; font-size: 14px;">设置</button>
+</form>
+
+<script src="js/jquery.min.js"></script>
+
+<script>
+    let fileNames = [];// 声明一个全局变量，用于存储文件名
+    <!--获取表单元素-->
+    const uploadForm = document.getElementById('uploadForm');
+    // 获取导出按钮元素
+    const exportButton = document.getElementById('exportButton');
+    // 添加表单提交事件监听器，当表单提交时触发回调函数
+    uploadForm.addEventListener('submit', function (e) {
+        e.preventDefault(); // 阻止表单默认提交行为
+        //创建FormData对象，用于存储要上传的文件数据
+        let formData = new FormData();
+        //获取所有的文件输入框
+        let files = document.querySelectorAll('input[type="file"]');
+        let hasFileSelected = false; // 是否至少选择了一个文件
+        // 遍历文件输入框
+        files.forEach(function (fileInput) {
+            // 获取当前文件输入框选择的文件列表
+            let fileList = fileInput.files;
+            for (let i = 0; i < fileList.length; i++) {
+                // 将文件添加到FormData中
+                formData.append('multipartFiles', fileList[i]);
+                formData.append('types', fileInput.id); // 使用文件输入框的id作为类型
+                // 标记已选择了文件
+                hasFileSelected = true;
+                // 获取文件名并存储到全局变量中
+                let fileName = fileList[i].name;
+                fileNames.push(fileName);
+            }
+        });
+        if (!hasFileSelected) {
+            alert('请至少选择一个文件！');
+            return;
+        }
+        // 显示文件上传中的提示信息
+        showLoadingMessage('文件上传中...');
+
+        // 使用Fetch API发送POST请求，将FormData对象作为请求体上传文件
+        fetch('/manage/server/uploadExcels', {
+            method: 'POST',
+            body: formData
+        })
+            // 处理数据库的响应数据
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                // 将后端返回的数据打印到控制台
+                console.log(data); // 处理后端返回的数据
+                // 判断文件上传是否成功
+                if (data.result === 1 && data.data.length > 0) {
+                    let fileUrls = data.data; // 获取文件路径数组
+                    exportButton.disabled = false; // 文件上传成功后启用导出按钮，禁用状态取消
+                    // 将文件路径数据存储在导出按钮的自定义属性中。存储文件路径数据
+                    exportButton.setAttribute('data-fileUrls', fileUrls.join(','));
+                    // 显示文件上传完成的提示信息
+                    showMessage('文件上传完成！', 'success');
+                }
+            })
+            // 处理上传失败的错误情况
+            .catch(function (error) {
+                console.error('上传失败:', error);
+                showMessage('文件上传失败，请重试！', 'error');
+            });
+    });
+    // 添加导出按钮的点击事件监听器
+    exportButton.addEventListener('click', function (e) {
+        e.preventDefault(); // 阻止默认提交行为
+
+        // 获取导出按钮的文件路径数据。
+        let fileUrls = exportButton.getAttribute('data-fileUrls');
+
+        if (!fileUrls) {
+            alert('请先上传文件！');
+            return;
+        }
+        showLoadingMessage('文件导出中...');
+        exportButton.disabled = true; // 禁用导出测试报告按钮
+
+        fetch('/manage/server/writeExcel?fileUrls=' + encodeURIComponent(fileUrls), {
+            method: 'GET'
+        })
+            // 处理数据库返回的Blob数据
+            .then(function (response) {
+                return response.blob();
+            })
+            .then(function (blob) {
+                // 创建Blob数据的URL
+                let url = window.URL.createObjectURL(blob);
+                // 创建一个a标签用于下载文件
+                let a = document.createElement('a');
+                // 设置a标签的下载地址
+                a.href = url;
+
+                let veNumber = ''; // 默认值
+
+                for (let i = 0; i < fileNames.length; i++) {
+                    let fileName = fileNames[i];
+
+                    // 使用正则表达式匹配文件名
+                    let matchResult = fileName.match(/_([^_]+)_/);
+                    if (matchResult && matchResult[1]) { // 在没有匹配结果时，matchResult 将是 null，无法直接访问索引为 1 的属性。因此，在访问 matchResult[1] 之前，你需要先检查 matchResult 是否为 null。首先检查 matchResult 是否存在并且具有索引 1 的属性。只有当 matchResult 存在并且具有索引 1 的属性时，才会执行赋值操作。这样就避免了在没有匹配结果时访问空对象的属性而导致的报错。
+                        veNumber = matchResult[1]; // 如果匹配成功，则将匹配结果赋值给veNumber
+                        break; // 跳出循环，不再继续遍历文件名数组
+                    }
+                }
+                // 设置下载的文件名为 "管号+测试报告.xlsx"
+                a.download = veNumber + "测试报告.xlsx";
+                // 模拟点击a标签来触发文件下载
+                a.click();
+                showMessage('文件导出完成！', 'success');
+                exportButton.disabled = false; // 禁用导出测试报告按钮
+                setTimeout(function () {
+                    location.reload(); // 刷新整个页面
+                }, 5000); // 延迟5秒钟执行刷新操作
+            })
+            .catch(function (error) {
+                console.error('导出失败:', error);
+                showMessage('文件导出失败，请重试！', 'error');
+            });
+    });
+
+    function showLoadingMessage(message) {
+        showMessage(message, 'loading');
+    }
+
+    function showMessage(message, type) {
+        let messageElement = document.createElement('div');
+        messageElement.innerText = message;
+        messageElement.className = type;
+        document.body.appendChild(messageElement);
+    }
+</script>
+</body>
+</html>

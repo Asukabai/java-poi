@@ -138,6 +138,7 @@
                 </configuration>
             </plugin>
         </plugins>
+        <finalName>poi_tools-1.0.0.RELEASE</finalName>
     </build>
 
 </project>
