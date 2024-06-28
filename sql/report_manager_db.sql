@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50727
 File Encoding         : 65001
 
-Date: 2020-03-21 22:06:35
+Date: 2024-03-21 22:06:35
 */
 
 CREATE DATABASE /*!32312 IF NOT EXISTS*/`report_manager_db` /*!40100 DEFAULT CHARACTER SET utf8 */;

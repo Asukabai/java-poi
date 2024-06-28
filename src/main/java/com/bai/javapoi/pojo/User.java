@@ -12,7 +12,7 @@ import java.util.List;
  * 员工
  */
 @Data
-@Table(name="tb_user2")
+@Table(name="tb_user")
 public class User {
     @Id
     @KeySql(useGeneratedKeys = true)

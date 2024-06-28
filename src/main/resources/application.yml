@@ -1,11 +1,23 @@
 server:
   port: 9080
+
+
 spring:
   datasource:
     # type字段是可选的，如果不指定type字段，默认会使用Spring Boot提供的默认数据源
     # Spring Boot提供的默认数据源是HikariCP 在Spring Boot 2.x 版本及以上，HikariCP已经成为了默认的数据源，取代了之前的Tomcat连接池（Tomcat JDBC）成为Spring Boot的首选数据源
     type: com.zaxxer.hikari.HikariDataSource # 使用HikariCP连接池作为数据源
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/report_manager_db
+    url: jdbc:mysql://localhost:3306/report_manager_db
     username: root
     password: 123456
+
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 500MB
+
+
+absolutePath: D:\\excelreport
+
+#absolutePath: /app
