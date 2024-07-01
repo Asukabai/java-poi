@@ -1,5 +1,5 @@
 # java-poi-合并，单一导出
-🚀 基于 springboot + vue + POI 完成对报表的导入导出（主要以模板template方式），并包含报表的相关常用操作的前后端不分离的项目。
+🚀 基于 springboot + vue + POI 完成对报表的导入导出（主要以模板template方式），并包含报表的相关常用操作的前后端不分离的前后端不分离项目。
 
 # 开发环境：
 
@@ -14,6 +14,8 @@ poi 4.0.1
 
 报表[forms for reporting to the higher organizations] 简单的说：报表就是用表格、图表等格式来动态显示数据，可以用公式表示为：“报表 = 多样的格式 + 动态的数据”。
 
+
+启动项目后，浏览器输入：http://localhost:9080/list.html 即可展示出员工的信息列表，并可以选择下载，导出等操作
 
 ![Image text](https://raw.githubusercontent.com/Asukabai/java-poi/master/20230803162624.png)
 

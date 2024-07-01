@@ -28,7 +28,6 @@ public class User {
     private Date birthday; //出生日期
     private String photo;    //一寸照片
     private String address;  //现在居住地址
-
     private List<Resource> resourceList; //办公用品
 
 }

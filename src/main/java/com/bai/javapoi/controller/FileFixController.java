@@ -23,7 +23,6 @@ public class FileFixController {
     @Resource
     private FileFixService fileFixService;
 
-
     @PostMapping(value = "/fixExcels")
     public RespondDto upLoadFiles(@NonNull @RequestParam("multipartFiles") MultipartFile[] multipartFiles,
                                   @NonNull @RequestParam("types") String[] types){
